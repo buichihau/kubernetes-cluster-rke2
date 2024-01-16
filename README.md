@@ -26,19 +26,35 @@
 | `worker-3`         | 192.168.2.109        | worker3.rke2.com     | 
 
 
+#  Set up the First Server Node (Master Node)
+* Install RKE2 server
 ```
 curl -sfL https://get.rke2.io --output install.sh
 chmod +x install.sh
 sudo INSTALL_RKE2_TYPE=server ./install.sh
 ```
 
-vim /etc/rancher/rke2/config.yaml
+* RKE2 config file for first server
 ```
-write-kubeconfig-mode: "0644"
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+token: rke2-k8s-sTill-win-@-zay
 tls-san:
-  - devopsvoice.click
+  - lb.rke2.com
   - 192.168.2.85
   - 192.168.2.104
   - 192.168.2.105
   - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.104
+node-name: master1.rke2.com
+EOF
 ```
+* start the service
+```
+sudo systemctl start rke2-server
+sudo systemctl enable rke2-server
+```
+
+
