@@ -13,7 +13,7 @@
 - SWAP : Disabled
 
 
-## Info Nodes
+## Step 1 – Set up Linux 8 Nodes
 
 | TASK               | IP ADDRESS           |  HOSTNAME            |
 | -------------------| ---------------------| ---------------------|
@@ -25,8 +25,43 @@
 | `worker-2`         | 192.168.2.108        | worker2.rke2.com     |
 | `worker-3`         | 192.168.2.109        | worker3.rke2.com     | 
 
+* Add the hostnames to /etc/hosts on each node
+```
+192.168.2.104 master1.rke2.com
+192.168.2.105 master2.rke2.com
+192.168.2.106 master3.rke2.com
+192.168.2.107 worker1.rke2.com
+192.168.2.108 worker2.rke2.com
+192.168.2.109 worker3.rke2.com
+192.168.2.85 lb.rke2.com
+```
 
-#  Set up the First Server Node (Master Node)
+* Disabled SELinux
+```
+setenforce 0
+sed -i --follow-symlinks 's/^SELINUX=enforcing/SELINUX=disabled/' /etc/sysconfig/selinux
+```
+
+* Disabled Firewall
+```
+systemctl disable firewalld >/dev/null 2>&1
+systemctl stop firewalld
+```
+
+* Disabled swap
+```
+sed -i '/swap/d' /etc/fstab
+swapoff -a
+```
+
+# Step 2 – Load Balancer Deployment
+- Load balancer can be of the following types:
+  - Nginx
+  - HAProxy
+  - Existing Load Balancer
+
+
+#  1. Set up the First Server Node (Master Node)
 * Install RKE2 server
 ```
 curl -sfL https://get.rke2.io --output install.sh
