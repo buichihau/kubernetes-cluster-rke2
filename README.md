@@ -61,7 +61,8 @@ swapoff -a
   - Existing Load Balancer
 
 
-#  1. Set up the First Server Node (Master Node)
+
+#  Step 3 – Set up the First Server Node (Master Node)
 * Install RKE2 server
 ```
 curl -sfL https://get.rke2.io --output install.sh
