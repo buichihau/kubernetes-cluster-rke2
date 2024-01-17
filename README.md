@@ -86,6 +86,8 @@ swapoff -a
 
 * Use HAProxy
 
+
+
 #  Step 3 – Set up the First Server Node (Master Node)
 * Install RKE2 server
 ```
@@ -402,5 +404,7 @@ kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{
 # Login Rancher
 
 url: https://rancher.example.com/
+
+![login-rancher.png](login-rancher.png?raw=true "login-rancher.png")
 
 vJmUd5IOLPkG2TaK
