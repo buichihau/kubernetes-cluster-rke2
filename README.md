@@ -385,7 +385,7 @@ helm install rancher rancher-latest/rancher \
 --set hostname=rancherdev.omicrm.services
 ```
 
-    If install with verison
+* If install with verison
 ```
 helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.example.com --version 2.7.2
 ```
