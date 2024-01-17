@@ -382,7 +382,7 @@ kubectl get pods --namespace cert-manager
 ```
 helm install rancher rancher-latest/rancher \
 --namespace cattle-system \
---set hostname=rancherdev.omicrm.services
+--set hostname=rancher.example.com
 ```
 
 * If installed with optional version
@@ -401,5 +401,6 @@ kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{
 
 # Login Rancher
 
-url: https://rancherdev.omicrm.services/
+url: https://rancher.example.com/
 
+vJmUd5IOLPkG2TaK
