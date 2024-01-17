@@ -278,3 +278,56 @@ worker1.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1  
 worker2.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1   192.168.2.108    <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
 worker3.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1   192.168.2.109    <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
 ```
+
+* Check pods
+```
+kubectl get pod -A
+NAMESPACE     NAME                                                    READY   STATUS      RESTARTS   AGE
+kube-system   cloud-controller-manager-master1.rke2.com               1/1     Running     0          12h
+kube-system   cloud-controller-manager-master2.rke2.com               1/1     Running     0          132m
+kube-system   cloud-controller-manager-master3.rke2.com               1/1     Running     0          120m
+kube-system   etcd-master1.rke2.com                                   1/1     Running     0          12h
+kube-system   etcd-master2.rke2.com                                   1/1     Running     0          131m
+kube-system   etcd-master3.rke2.com                                   1/1     Running     0          120m
+kube-system   helm-install-rke2-canal-l28sd                           0/1     Completed   0          12h
+kube-system   helm-install-rke2-coredns-8pb9f                         0/1     Completed   0          12h
+kube-system   helm-install-rke2-ingress-nginx-sdvh6                   0/1     Completed   0          12h
+kube-system   helm-install-rke2-metrics-server-9rkhv                  0/1     Completed   0          12h
+kube-system   helm-install-rke2-snapshot-controller-7s5xs             0/1     Completed   1          12h
+kube-system   helm-install-rke2-snapshot-controller-crd-88rf8         0/1     Completed   0          12h
+kube-system   helm-install-rke2-snapshot-validation-webhook-lvhwl     0/1     Completed   0          12h
+kube-system   kube-apiserver-master1.rke2.com                         1/1     Running     0          12h
+kube-system   kube-apiserver-master2.rke2.com                         1/1     Running     0          132m
+kube-system   kube-apiserver-master3.rke2.com                         1/1     Running     0          120m
+kube-system   kube-controller-manager-master1.rke2.com                1/1     Running     0          12h
+kube-system   kube-controller-manager-master2.rke2.com                1/1     Running     0          132m
+kube-system   kube-controller-manager-master3.rke2.com                1/1     Running     0          120m
+kube-system   kube-proxy-master1.rke2.com                             1/1     Running     0          12h
+kube-system   kube-proxy-master2.rke2.com                             1/1     Running     0          132m
+kube-system   kube-proxy-master3.rke2.com                             1/1     Running     0          120m
+kube-system   kube-proxy-worker3.rke2.com                             1/1     Running     0          25m
+kube-system   kube-proxy-worker2.rke2.com                             1/1     Running     0          25m
+kube-system   kube-proxy-worker1.rke2.com                             1/1     Running     0          25m
+kube-system   kube-scheduler-master1.rke2.com                         1/1     Running     0          12h
+kube-system   kube-scheduler-master2.rke2.com                         1/1     Running     0          132m
+kube-system   kube-scheduler-master3.rke2.com                         1/1     Running     0          120m
+kube-system   rke2-canal-5l4sl                                        2/2     Running     0          121m
+kube-system   rke2-canal-8dqnt                                        2/2     Running     0          12h
+kube-system   rke2-canal-hgl8c                                        2/2     Running     0          132m
+kube-system   rke2-canal-ddfjc                                        2/2     Running     0          25m
+kube-system   rke2-canal-fjfjc                                        2/2     Running     0          25m
+kube-system   rke2-canal-mj5jc                                        2/2     Running     0          25m
+kube-system   rke2-coredns-rke2-coredns-565dfc7d75-9m7pt              1/1     Running     0          132m
+kube-system   rke2-coredns-rke2-coredns-565dfc7d75-vmn8h              1/1     Running     0          12h
+kube-system   rke2-coredns-rke2-coredns-autoscaler-6c48c95bf9-852zt   1/1     Running     0          12h
+kube-system   rke2-ingress-nginx-controller-djf74                     1/1     Running     0          24m
+kube-system   rke2-ingress-nginx-controller-5qznc                     1/1     Running     0          24m
+kube-system   rke2-ingress-nginx-controller-lskud                     1/1     Running     0          24m
+kube-system   rke2-ingress-nginx-controller-f7tkk                     1/1     Running     0          131m
+kube-system   rke2-ingress-nginx-controller-n9nlj                     1/1     Running     0          120m
+kube-system   rke2-ingress-nginx-controller-ww5nj                     1/1     Running     0          12h
+kube-system   rke2-metrics-server-c9c78bd66-7t8sr                     1/1     Running     0          12h
+kube-system   rke2-snapshot-controller-6f7bbb497d-tdz5j               1/1     Running     0          12h
+kube-system   rke2-snapshot-validation-webhook-65b5675d5c-5dpp4       1/1     Running     0          12h
+
+```
