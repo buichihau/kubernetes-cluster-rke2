@@ -385,8 +385,21 @@ helm install rancher rancher-latest/rancher \
 --set hostname=rancherdev.omicrm.services
 ```
 
-* If install with verison
+* If installed with optional version
 ```
 helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.example.com --version 2.7.2
 ```
+
+* View the status of the deployment
+```
+kubectl -n cattle-system rollout status deploy/rancher
+```
+* check password rancher
+```
+kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{"\n"}}'
+```
+
+# Login Rancher
+
+url: https://rancherdev.omicrm.services/
 
