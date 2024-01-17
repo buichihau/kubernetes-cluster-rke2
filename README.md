@@ -93,4 +93,81 @@ sudo systemctl start rke2-server
 sudo systemctl enable rke2-server
 ```
 
+* install kubeclt
+```
+curl -LO https://dl.k8s.io/release/`curl -LS https://dl.k8s.io/release/stable.txt`/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+kubectl version
+```
 
+* After some time, check if the node and pods are up:
+```
+$ kubectl get nodes
+NAME               STATUS   ROLES                       AGE   VERSION
+master1.rke2.com   Ready    control-plane,etcd,master   9h    v1.26.12+rke2r1
+
+```
+
+# Step 4 – Set up additional Server Nodes (Master Nodes)
+
+* Install RKE2 server
+```
+curl -sfL https://get.rke2.io --output install.sh
+chmod +x install.sh
+sudo INSTALL_RKE2_TYPE=server ./install.sh
+```
+
+* RKE2 config file for second server (master2)
+```
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+server: https://192.168.2.85:9345
+token: rke2-k8s-sTill-win-@-zay
+tls-san:
+  - lb.rke2.com
+  - 192.168.2.85
+  - 192.168.2.104
+  - 192.168.2.105
+  - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.105
+node-name: master2.rke2.com
+EOF
+```
+
+* RKE2 config file for third  server (master3)
+```
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+server: https://192.168.2.85:9345
+token: rke2-k8s-sTill-win-@-zay
+tls-san:
+  - lb.rke2.com
+  - 192.168.2.85
+  - 192.168.2.104
+  - 192.168.2.105
+  - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.106
+node-name: master3.rke2.com
+EOF
+```
+
+* start the service
+```
+sudo systemctl start rke2-server
+sudo systemctl enable rke2-server
+```
+* After some time, check the status of the nodes
+```
+kubectl get node -owide
+NAME               STATUS   ROLES                       AGE   VERSION           INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION                CONTAINER-RUNTIME
+master1.rke2.com   Ready    control-plane,etcd,master   10h   v1.26.12+rke2r1   192.168.2.104   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+master2.rke2.com   Ready    control-plane,etcd,master   22m   v1.26.12+rke2r1   192.168.2.105   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+master3.rke2.com   Ready    control-plane,etcd,master   11m   v1.26.12+rke2r1   192.168.2.106   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+
+```
