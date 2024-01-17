@@ -12,6 +12,7 @@
 - SELinux: Disabled
 - SWAP : Disabled
 
+![create-ha-cluster-k8s-rke2-cluster-ha.jpg](create-ha-cluster-k8s-rke2-cluster-ha.jpg?raw=true "create-ha-cluster-k8s-rke2-cluster-ha.jpg")
 
 ## Step 1 – Set up Linux 8 Nodes
 
@@ -406,5 +407,3 @@ kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{
 url: https://rancher.example.com/
 
 ![login-rancher.png](login-rancher.png?raw=true "login-rancher.png")
-
-vJmUd5IOLPkG2TaK
