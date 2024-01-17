@@ -20,10 +20,34 @@
 | `master-1`         | 192.168.2.104        | master1.rke2.com     |  
 | `master-2`         | 192.168.2.105        | master2.rke2.com     |
 | `master-3`         | 192.168.2.106        | master3.rke2.com     |
-| `load balancer`    | 192.168.2.185        | lb.rke2.com          |
+| `load balancer`    | 192.168.2.85         | lb.rke2.com          |
 | `worker-1`         | 192.168.2.107        | worker1.rke2.com     |
 | `worker-2`         | 192.168.2.108        | worker2.rke2.com     |
 | `worker-3`         | 192.168.2.109        | worker3.rke2.com     | 
+
+* Set the hostnames as shown
+```
+##On Node1
+sudo hostnamectl set-hostname master1.rke2.com 
+
+##On Node2
+sudo hostnamectl set-hostname master2.rke2.com 
+
+##On Node3
+sudo hostnamectl set-hostname master3.rke2.com 
+
+##On Loadbalancer(Node4)
+sudo hostnamectl set-hostname lb.rke2.com 
+
+##On Node5
+sudo hostnamectl set-hostname worker1.rke2.com
+
+##On Node6
+sudo hostnamectl set-hostname worker2.rke2.com
+
+##On Node7
+sudo hostnamectl set-hostname worker3.rke2.com
+```
 
 * Add the hostnames to /etc/hosts on each node
 ```
@@ -59,8 +83,6 @@ swapoff -a
   - Nginx
   - HAProxy
   - Existing Load Balancer
-
-
 
 #  Step 3 – Set up the First Server Node (Master Node)
 * Install RKE2 server
