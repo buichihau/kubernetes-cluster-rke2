@@ -111,6 +111,8 @@ node-ip: 192.168.2.104
 node-name: master1.rke2.com
 EOF
 ```
+Link conf: https://docs.rke2.io/reference/server_config
+
 * Start the service
 ```
 sudo systemctl start rke2-server
@@ -331,3 +333,60 @@ kube-system   rke2-snapshot-controller-6f7bbb497d-tdz5j               1/1     Ru
 kube-system   rke2-snapshot-validation-webhook-65b5675d5c-5dpp4       1/1     Running     0          12h
 
 ```
+
+# Installing the Rancher Prime server on a Kubernetes cluster
+
+* install helm
+```
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+
+* add needed helm charts
+```
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm repo add jetstack https://charts.jetstack.io
+```
+
+* Create a Namespace for Rancher and cert-manager
+```
+kubectl create namespace cattle-system
+kubectl create namespace cert-manager
+```
+
+* Apply the certification manager file
+```
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.11.0/cert-manager.crds.yaml
+```
+**Link: https://github.com/cert-manager/cert-manager/releases**
+
+* Update repositories
+```
+helm repo update
+```
+
+* Helm install the certificate manager in a new namespace called cert-manager
+```
+helm install cert-manager jetstack/cert-manager \
+--namespace cert-manager \
+--create-namespace \
+--version v1.11.0
+```
+
+* Verify that the cert-manager pods are running
+```
+kubectl get pods --namespace cert-manager
+```
+* Install the latest rancher in the cattle-system namespace and set the hostname
+```
+helm install rancher rancher-latest/rancher \
+--namespace cattle-system \
+--set hostname=rancherdev.omicrm.services
+```
+
+If install with verison
+```
+helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.example.com --version 2.7.2
+```
+
