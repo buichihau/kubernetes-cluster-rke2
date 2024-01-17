@@ -84,6 +84,8 @@ swapoff -a
   - HAProxy
   - Existing Load Balancer
 
+* Use HAProxy
+
 #  Step 3 – Set up the First Server Node (Master Node)
 * Install RKE2 server
 ```
@@ -109,7 +111,7 @@ node-ip: 192.168.2.104
 node-name: master1.rke2.com
 EOF
 ```
-* start the service
+* Start the service
 ```
 sudo systemctl start rke2-server
 sudo systemctl enable rke2-server
@@ -191,5 +193,88 @@ NAME               STATUS   ROLES                       AGE   VERSION           
 master1.rke2.com   Ready    control-plane,etcd,master   10h   v1.26.12+rke2r1   192.168.2.104   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
 master2.rke2.com   Ready    control-plane,etcd,master   22m   v1.26.12+rke2r1   192.168.2.105   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
 master3.rke2.com   Ready    control-plane,etcd,master   11m   v1.26.12+rke2r1   192.168.2.106   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+```
 
+# Step 5 – Set up Agent Nodes (Worker Nodes)
+
+* Install RKE2 agent
+```
+curl -sfL https://get.rke2.io --output install.sh
+chmod +x install.sh
+sudo INSTALL_RKE2_TYPE=agent ./install.sh
+```
+
+* RKE2 config file for Agent Nodes (Worker 1)
+```
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+server: https://192.168.2.85:9345
+token: rke2-k8s-sTill-win-@-zay
+tls-san:
+  - lb.rke2.com
+  - 192.168.2.85
+  - 192.168.2.104
+  - 192.168.2.105
+  - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.107
+node-name: worker1.rke2.com
+EOF
+```
+
+* RKE2 config file for Agent Nodes (Worker 2)
+```
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+server: https://192.168.2.85:9345
+token: rke2-k8s-sTill-win-@-zay
+tls-san:
+  - lb.rke2.com
+  - 192.168.2.85
+  - 192.168.2.104
+  - 192.168.2.105
+  - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.108
+node-name: worker2.rke2.com
+EOF
+```
+
+* RKE2 config file for Agent Nodes (Worker 3)
+```
+cat >>/etc/rancher/rke2/config.yaml<<EOF
+server: https://192.168.2.85:9345
+token: rke2-k8s-sTill-win-@-zay
+tls-san:
+  - lb.rke2.com
+  - 192.168.2.85
+  - 192.168.2.104
+  - 192.168.2.105
+  - 192.168.2.106
+  - master1.rke2.com 
+  - master2.rke2.com
+  - master3.rke2.com 
+node-ip: 192.168.2.109
+node-name: worker3.rke2.com
+EOF
+```
+
+* start the service rke2-agent
+```
+sudo systemctl start rke2-agent
+sudo systemctl enable rke2-agent
+```
+
+* After some time, check the status of the nodes
+```
+ kubectl get node -owide
+NAME               STATUS   ROLES                       AGE    VERSION           INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION                CONTAINER-RUNTIME
+master1.rke2.com   Ready    control-plane,etcd,master   12h    v1.26.12+rke2r1   192.168.2.104   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+master2.rke2.com   Ready    control-plane,etcd,master   130m   v1.26.12+rke2r1   192.168.2.105   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+master3.rke2.com   Ready    control-plane,etcd,master   119m   v1.26.12+rke2r1   192.168.2.106   <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+worker1.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1   192.168.2.107    <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+worker2.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1   192.168.2.108    <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
+worker3.rke2.com   Ready    <none>                      23m    v1.26.12+rke2r1   192.168.2.109    <none>        CentOS Linux 7 (Core)   3.10.0-1160.90.1.el7.x86_64   containerd://1.7.11-k3s2
 ```
