@@ -196,6 +196,12 @@ export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 kubectl version
 ```
 
+* Setup terminal
+```
+echo 'alias k=kubectl' >> ~/.bashrc
+echo 'alias c=clear' >> ~/.bashrc
+```
+
 * After some time, check if the node and pods are up:
 ```
 $ kubectl get nodes
